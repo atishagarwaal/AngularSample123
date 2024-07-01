@@ -63,6 +63,13 @@ steps:
 
  - task: CopyFiles@2
    inputs:
+    SourceFolder: '$(Build.ArtifactStagingDirectory)/AngularSample'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+
+ - task: CopyFiles@2
+   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)/AngularSample/ClientApp/dist'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/wwwroot'

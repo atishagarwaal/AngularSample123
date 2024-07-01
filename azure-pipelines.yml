@@ -60,11 +60,19 @@ steps:
      zipAfterPublish: False
    displayName: 'Publish .NET Project'
 
+
  - task: CopyFiles@2
    inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)/AngularSample/ClientApp/dist'
     Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/AngularSample/ClientApp/dist'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/wwwroot'
+
+
+ - task: CopyFiles@2
+   inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/AngularSample/ClientApp/dist'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/ClientApp/dist'
 
  - task: PublishPipelineArtifact@1
    inputs:

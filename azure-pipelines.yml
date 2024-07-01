@@ -64,6 +64,7 @@ steps:
  - task: CopyFiles@2
    inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/AngularSample'
+    flattenFolders: true
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 

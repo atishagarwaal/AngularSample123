@@ -22,11 +22,11 @@ steps:
  - task: Npm@1
    inputs:
     command: 'install'
-    workingDir: 'AngularSample/ClientApp'
+    workingDir: 'ClientApp'
    displayName: 'npm install'
 
  - script: |
-    npm --prefix ./AngularSample/ClientApp run build 
+    npm --prefix ./ClientApp run build 
    displayName: 'npm build'
 
  - task: UseDotNet@2
@@ -63,24 +63,9 @@ steps:
 
  - task: CopyFiles@2
    inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)/AngularSample'
-    flattenFolders: true
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-
- - task: CopyFiles@2
-   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/AngularSample/ClientApp/dist'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/ClientApp/dist'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/wwwroot'
-
-
- - task: CopyFiles@2
-   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)/AngularSample/ClientApp/dist'
-    Contents: '**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/ClientApp/dist'
 
  - task: PublishPipelineArtifact@1
    inputs:

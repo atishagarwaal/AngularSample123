@@ -65,7 +65,7 @@ steps:
    inputs:
     SourceFolder: '$(Build.ArtifactStagingDirectory)/AngularSample'
     flattenFolders: true
-    Contents: '**'
+    Contents: '**.*'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 

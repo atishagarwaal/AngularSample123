@@ -1,0 +1,73 @@
+# ASP.NET Core (.NET Framework) 
+# Build and test ASP.NET Core projects targeting the full .NET Framework. 
+# Add steps that publish symbols, save build artifacts, and more: 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core 
+
+trigger: 
+- master
+
+pool:
+ vmImage: 'ubuntu-latest'
+
+variables: 
+ buildConfiguration: 'Release'
+
+steps:
+
+ - task: NodeTool@0
+   inputs:
+    versionSpec: '20.x'
+   displayName: 'Install Node.js'
+
+ - task: Npm@1
+   inputs:
+    command: 'install'
+    workingDir: 'AngularAppSample/ClientApp'
+   displayName: 'npm install'
+
+ - script: |
+    npm --prefix ./AngularAppSample/ClientApp run build 
+   displayName: 'npm build'
+
+ - task: UseDotNet@2
+   inputs:
+    packageType: 'sdk'
+    version: '8.x'
+   displayName: 'Install .NET SDK'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+   displayName: 'Restore Nuget Packages'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+     command: 'build'
+     projects: '**/*.csproj'
+     arguments: '--configuration $(buildConfiguration)'
+   displayName: 'Build .NET Project'
+
+
+ - task: DotNetCoreCLI@2
+   inputs:
+     command: 'publish'
+     projects: '**/*.csproj' 
+     publishWebProjects: true
+     arguments: '--configuration $(BuildConfiguration) --output  $(Build.ArtifactStagingDirectory)'
+     zipAfterPublish: False
+   displayName: 'Publish .NET Project'
+
+ - task: CopyFiles@2
+   inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)/AngularAppSample/ClientApp/dist'
+    Contents: '**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/AngularAppSample/ClientApp/dist'
+
+ - task: PublishPipelineArtifact@1
+   inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'drop'
+    publishLocation: 'pipeline'
